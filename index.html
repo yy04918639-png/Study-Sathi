@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#155eef">
+<title>Study Sathi — Learn Better</title>
+<style>
+:root{--blue:#155eef;--blue2:#eaf1ff;--ink:#172033;--muted:#667085;--bg:#f5f7fb;--line:#e5eaf2;--green:#16865c}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(135deg,#155eef,#6b8cff);color:white;padding:24px 18px 26px;border-radius:0 0 24px 24px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{font-weight:800;font-size:21px;letter-spacing:.2px}.tag{font-size:12px;background:#ffffff26;padding:7px 10px;border-radius:99px}
+h1{font-size:26px;line-height:1.15;margin:24px 0 8px;max-width:330px}header p{margin:0;color:#edf2ff;font-size:14px;line-height:1.5}
+main{max-width:760px;margin:auto;padding:18px 16px 40px}.section-head{display:flex;justify-content:space-between;align-items:center;margin:22px 0 12px}.section-head h2{font-size:18px;margin:0}.hint{font-size:12px;color:var(--muted)}
+.classes{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.class-btn{border:1px solid var(--line);background:white;border-radius:13px;padding:13px 4px;font-weight:700;color:var(--ink);font-size:14px}.class-btn.active{background:var(--blue);border-color:var(--blue);color:white;box-shadow:0 5px 14px #155eef30}
+.subjects{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.subject{background:white;border:1px solid var(--line);border-radius:16px;padding:15px;text-align:left;min-height:122px;color:var(--ink);cursor:pointer}.subject:active{transform:scale(.99)}.emoji{font-size:25px}.subject strong{display:block;margin:9px 0 4px;font-size:14px}.subject small{color:var(--muted);font-size:12px}
+.panel{background:white;border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:14px}.panel h3{margin:0 0 7px;font-size:17px}.panel p{font-size:14px;line-height:1.6;color:#475467}.primary,.secondary{border:0;border-radius:11px;padding:12px 15px;font-size:14px;font-weight:700;cursor:pointer}.primary{background:var(--blue);color:white}.secondary{background:var(--blue2);color:var(--blue)}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.hidden{display:none!important}.pill{display:inline-block;color:var(--blue);background:var(--blue2);border-radius:99px;padding:5px 9px;font-size:12px;font-weight:700;margin-bottom:8px}
+.question{font-weight:700;margin:13px 0}.option{display:block;width:100%;text-align:left;background:white;border:1px solid var(--line);border-radius:11px;padding:12px;margin:8px 0;color:var(--ink);font-size:14px}.option.chosen{border-color:var(--blue);background:var(--blue2)}.feedback{font-size:14px;padding:10px;border-radius:10px;margin-top:10px}.correct{background:#e8f7ef;color:#116845}.wrong{background:#fff0ef;color:#b42318}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:10px 16px 28px}
+@media(min-width:600px){header{padding:30px max(24px,calc((100% - 720px)/2)) 32px}h1{font-size:32px}.subject{padding:19px}}
+</style>
+
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#155eef">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="icon" type="image/svg+xml" href="./study-sathi.svg">
+</head>
+<body>
+<header>
+  <div class="top"><div class="brand">📘 Study Sathi</div><div class="tag">LEARN • PRACTISE • GROW</div></div>
+  <h1>Your learning journey starts here.</h1>
+  <p>Easy lessons and quick quizzes for Classes 9–12.</p>
+</header>
+<main>
+  <div class="section-head"><h2>Choose your class</h2><span class="hint">Nepal • Classes 9–12</span></div>
+  <div class="classes" id="classes">
+    <button class="class-btn active" data-class="9">Class 9</button>
+    <button class="class-btn" data-class="10">Class 10</button>
+    <button class="class-btn" data-class="11">Class 11</button>
+    <button class="class-btn" data-class="12">Class 12</button>
+  </div>
+  <div class="section-head"><h2 id="subjectTitle">Class 9 subjects</h2><span class="hint">Choose a subject</span></div>
+  <div class="subjects" id="subjects"></div>
+  <section class="panel" id="lessonPanel">
+    <span class="pill" id="lessonPill">SAMPLE LESSON</span>
+    <h3 id="lessonTitle">What is Accountancy?</h3>
+    <p id="lessonText">Accountancy is the process of recording, classifying, summarising and interpreting the financial transactions of a business.</p>
+    <div class="actions"><button class="primary" id="quizBtn">Try a quick quiz</button><button class="secondary" id="completeBtn">Mark lesson complete ✓</button><button class="secondary" id="prevBtn">Previous</button><button class="secondary" id="nextBtn">Next lesson</button></div>
+    <p class="hint" id="lessonProgress"></p>
+    <p class="hint">Curriculum note: sample learning content, not a substitute for the current official syllabus or your prescribed textbook.</p>
+  </section>
+  <section class="panel hidden" id="quizPanel">
+    <span class="pill">QUICK QUIZ</span>
+    <h3 id="quizSubject">Accountancy</h3>
+    <div class="question" id="questionText"></div>
+    <div id="options"></div>
+    <div id="feedback" class="hidden"></div>
+    <div class="actions"><button class="primary" id="nextQuestion">Next question</button><button class="secondary" id="backBtn">Back to lesson</button></div>
+  </section>
+  <section class="panel">
+    <h3>📈 Your practice</h3>
+    <p id="progressText">You have answered 0 quiz questions correctly.</p>
+    <p class="hint">This prototype stores your quiz score in this browser on this device.</p>
+  </section>
+</main>
+<footer>Study Sathi • Version 3 • Beginner Accountancy module</footer>
+<script>
+const subjects=[
+ {name:"Accountancy",emoji:"🧾",desc:"Journal entries & accounts"},
+ {name:"Economics",emoji:"📊",desc:"Markets & the economy"},
+ {name:"Business Studies",emoji:"💼",desc:"Business basics"},
+ {name:"Science",emoji:"🔬",desc:"Explore how things work"}
+];
+const lessons={
+ "Accountancy":[
+  {title:"1. Introduction to Accounting",text:"Accounting is the systematic process of identifying, measuring, recording and communicating financial information. It helps users understand the financial activities and position of a business. This is a general introductory lesson; follow the prescribed course for your class."},
+  {title:"2. Objectives of Accounting",text:"Key objectives include keeping systematic records, calculating profit or loss, showing financial position, supporting business decisions, and providing useful information to owners, managers, lenders and other interested users."},
+  {title:"3. Basic Accounting Terms",text:"Assets are resources owned or controlled by a business. Liabilities are amounts owed to others. Capital is the owner's investment. Drawings are cash or goods taken by the owner for personal use. Revenue is income earned, while expenses are costs incurred in operating the business."},
+  {title:"4. The Accounting Equation",text:"Assets = Liabilities + Capital. Example: a business has cash of Rs. 50,000 contributed by its owner and no liabilities. Assets are Rs. 50,000; capital is Rs. 50,000. Both sides are equal."},
+  {title:"5. Debit and Credit: First Rules",text:"Every journal entry has equal total debits and credits. As a starting rule, assets and expenses normally increase by debit; liabilities, capital and income normally increase by credit. Identify the accounts affected and the type of transaction before deciding the entry."},
+  {title:"6. A Simple Journal Entry",text:"Example: the owner starts a business by investing Rs. 20,000 cash. Cash increases, so debit Cash Account. Owner's capital increases, so credit Capital Account. Entry: Cash A/c Dr. Rs. 20,000; To Capital A/c Rs. 20,000. Total debit equals total credit."},
+  {title:"7. Practice: Identify the Accounts",text:"Transaction: paid office rent of Rs. 2,000 in cash. Rent is an expense and increases on the debit side. Cash is an asset and decreases, so credit Cash Account. Entry: Rent A/c Dr. Rs. 2,000; To Cash A/c Rs. 2,000."},
+  {title:"8. Your Curriculum Matters",text:"The exact subject name and chapters depend on your grade and school stream. In Nepal, Accountancy is offered as an elective in Grades 11–12; some earlier-grade courses or schools may use different subject structures. Check the current Curriculum Development Centre syllabus and your prescribed textbook before relying on a chapter for an exam."}],
+ "Economics":[
+  {title:"What is Economics?",text:"Economics studies how people use limited resources to satisfy their many wants. Because resources are limited, people must make choices."},
+  {title:"Demand",text:"Demand means the quantity of a good or service consumers are willing and able to buy at different prices during a given period."}],
+ "Business Studies":[
+  {title:"What is business?",text:"Business is an economic activity involving the production or exchange of goods and services to satisfy needs and wants. Many businesses aim to earn profit while serving customers."},
+  {title:"Business objectives",text:"Common business objectives include earning profit, satisfying customers, growing the business, creating employment and acting responsibly."}],
+ "Science":[
+  {title:"Scientific learning",text:"Science uses observation, questions, evidence and testing to understand the natural world. A fair test changes one factor at a time while keeping other conditions the same."},
+  {title:"Living and non-living things",text:"Living things carry out life processes such as nutrition, respiration, growth, response and reproduction. Non-living things do not carry out all these life processes."}]
+};
+const quizzes={
+ "Accountancy":[
+  {q:"What is a key purpose of accounting?",o:["To keep systematic financial records","To hide transactions","To guarantee profit every day"],a:0,why:"Accounting keeps systematic records and communicates useful financial information."},
+  {q:"Which of these is an asset?",o:["A bank loan payable","Cash in hand","Unpaid salary"],a:1,why:"Cash in hand is a resource of the business, so it is an asset."},
+  {q:"Capital represents…",o:["The owner's investment in the business","Only money owed to suppliers","Every expense paid"],a:0,why:"Capital represents the owner's investment in the business."},
+  {q:"Choose the correct accounting equation.",o:["Assets = Liabilities + Capital","Assets = Income − Expenses","Capital = Assets + Liabilities"],a:0,why:"The basic accounting equation is Assets = Liabilities + Capital."},
+  {q:"The owner invests Rs. 20,000 cash. Which account is credited?",o:["Cash Account","Capital Account","Rent Account"],a:1,why:"The owner's capital increases, so Capital Account is credited."},
+  {q:"Rent paid in cash is recorded as…",o:["Rent Dr., Cash Cr.","Cash Dr., Rent Cr.","Capital Dr., Rent Cr."],a:0,why:"Rent is an expense, so debit Rent; cash decreases, so credit Cash."},
+  {q:"What must be equal in a journal entry?",o:["Total debits and total credits","Assets and expenses in every transaction","Cash and capital in every transaction"],a:0,why:"The total debit amount must equal the total credit amount."},
+  {q:"Goods bought for resale are normally recorded in which account in a basic periodic system?",o:["Purchases Account","Drawings Account","Capital Account"],a:0,why:"In a basic periodic accounting system, goods bought for resale are recorded in Purchases Account."}]
+ "Economics":[
+  {q:"Why do people have to make economic choices?",o:["Resources are limited","All wants are already satisfied","Goods are always free"],a:0,why:"Resources are limited, while human wants are many."},
+  {q:"Demand refers to willingness and ability to…",o:["Produce only","Buy a good or service","Pay no price in every case"],a:1,why:"Demand includes both willingness and ability to buy."}],
+ "Business Studies":[
+  {q:"Which is a common objective of a business?",o:["Satisfying customers","Avoiding every customer","Never keeping records"],a:0,why:"Businesses commonly aim to satisfy customers and earn profit."},
+  {q:"Goods are mainly…",o:["Tangible items","Only advice","Always free"],a:0,why:"Goods are physical items that can generally be touched."}],
+ "Science":[
+  {q:"Which is part of scientific learning?",o:["Guessing without checking","Observation and evidence","Ignoring results"],a:1,why:"Science relies on observation, evidence and testing."},
+  {q:"Which is a living thing?",o:["Stone","Chair","Plant"],a:2,why:"A plant carries out life processes and is living."}]
+};
+let selectedClass="9", selectedSubject="Accountancy", lessonIndex=0, quizIndex=0, answered=false;
+let correct=Number(localStorage.getItem("studySathiCorrect")||0), attempted=Number(localStorage.getItem("studySathiAttempted")||0);
+let completedLessons=JSON.parse(localStorage.getItem("studySathiCompletedLessons")||"[]");
+const $=id=>document.getElementById(id);
+function renderSubjects(){
+ $("subjectTitle").textContent="Class "+selectedClass+" subjects";
+ $("subjects").innerHTML=subjects.map(s=>`<button class="subject" data-subject="${s.name}"><span class="emoji">${s.emoji}</span><strong>${s.name}</strong><small>${s.desc}</small></button>`).join("");
+ document.querySelectorAll(".subject").forEach(b=>b.addEventListener("click",()=>selectSubject(b.dataset.subject)));
+}
+function selectSubject(name){selectedSubject=name;lessonIndex=0;quizIndex=0;$("quizPanel").classList.add("hidden");$("lessonPanel").classList.remove("hidden");renderLesson();}
+function lessonKey(){return selectedClass+"|"+selectedSubject+"|"+lessonIndex;}
+function renderLesson(){const list=lessons[selectedSubject];lessonIndex=(lessonIndex+list.length)%list.length;const l=list[lessonIndex];$("lessonPill").textContent="CLASS "+selectedClass+" • SAMPLE LESSON";$("lessonTitle").textContent=l.title;$("lessonText").textContent=l.text;$("completeBtn").textContent=completedLessons.includes(lessonKey())?"Completed ✓":"Mark lesson complete ✓";$("lessonProgress").textContent="Lesson "+(lessonIndex+1)+" of "+list.length+" • "+completedLessons.filter(k=>k.startsWith(selectedClass+"|"+selectedSubject+"|")).length+" completed";}
+function showQuiz(){quizIndex=0;$("lessonPanel").classList.add("hidden");$("quizPanel").classList.remove("hidden");renderQuiz();}
+function renderQuiz(){answered=false;const list=quizzes[selectedSubject];const q=list[quizIndex%list.length];$("quizSubject").textContent=selectedSubject+" • Question "+(quizIndex%list.length+1);$("questionText").textContent=q.q;$("options").innerHTML=q.o.map((o,i)=>`<button class="option" data-index="${i}">${String.fromCharCode(65+i)}. ${o}</button>`).join("");$("feedback").className="hidden";$("feedback").textContent="";document.querySelectorAll(".option").forEach(b=>b.addEventListener("click",()=>answer(Number(b.dataset.index))));}
+function answer(i){if(answered)return;answered=true;attempted++;const q=quizzes[selectedSubject][quizIndex%quizzes[selectedSubject].length];const ok=i===q.a;if(ok)correct++;localStorage.setItem("studySathiCorrect",correct);localStorage.setItem("studySathiAttempted",attempted);document.querySelectorAll(".option").forEach((b,j)=>{b.disabled=true;if(j===q.a)b.classList.add("chosen")});$("feedback").className="feedback "+(ok?"correct":"wrong");$("feedback").textContent=(ok?"Correct! ":"Not quite. ")+q.why;renderProgress();}
+function renderProgress(){$("progressText").textContent=`You have answered ${correct} out of ${attempted} quiz questions correctly.`;}
+document.querySelectorAll(".class-btn").forEach(b=>b.addEventListener("click",()=>{selectedClass=b.dataset.class;document.querySelectorAll(".class-btn").forEach(x=>x.classList.toggle("active",x===b));renderSubjects();selectSubject(selectedSubject);}));
+$("quizBtn").addEventListener("click",showQuiz);
+$("nextBtn").addEventListener("click",()=>{lessonIndex++;renderLesson();});
+$("prevBtn").addEventListener("click",()=>{lessonIndex--;renderLesson();});
+$("completeBtn").addEventListener("click",()=>{const k=lessonKey();if(!completedLessons.includes(k))completedLessons.push(k);localStorage.setItem("studySathiCompletedLessons",JSON.stringify(completedLessons));renderLesson();});
+$("nextQuestion").addEventListener("click",()=>{quizIndex++;renderQuiz();});$("backBtn").addEventListener("click",()=>{$("quizPanel").classList.add("hidden");$("lessonPanel").classList.remove("hidden");});
+renderSubjects();renderLesson();renderProgress();
+</script>
+
+<script>
+if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js").catch(err => {
+      console.warn("Offline support could not be enabled:", err);
+    });
+  });
+}
+</script>
+
+</body>
+</html>
